@@ -95,7 +95,7 @@ app.post("/generate-emails", async (req, res) => {
 
 async function scrapeRecipientWebsite(website) {
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: true,
   });
   const page = await browser.newPage();
 
