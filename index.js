@@ -2,11 +2,14 @@ const express = require("express");
 const app = express();
 const puppeteer = require("puppeteer");
 const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const { Configuration, OpenAIApi } = require("openai");
+console.log("API kEY", process.env.API_KEY);
 
 const config = new Configuration({
-  apiKey: "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",
+  apiKey: process.env.API_KEY,
 });
 
 const openai = new OpenAIApi(config);
@@ -14,19 +17,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("scrap", { result: "" });
+  res.render("scrap", { subject: "", body: "" });
 });
 
 app.post("/generate-emails", async (req, res) => {
   console.log("Request Body:", req.body);
   try {
-    const recipientWebsite = req.body.website;
-    const recipientCompanyName = req.body.companyName;
+    const recipientWebsite = req.body.recipientWebsite;
+    const recipientCompanyName = req.body.recipientCompanyName;
     const city = req.body.city;
-    const recipientIndustryCategory = req.body.category;
-    const senderCompanyDetails = req.body.SenderCompanyDetails;
-    const senderValueProposition = req.body.senderValueProp;
-    const senderDesiredCallToAction = req.body.sendDesiredCall;
+    const recipientIndustryCategory = req.body.recipientIndustryCategory;
+    const senderCompanyDetails = req.body.senderCompanyDetails;
+    const senderValueProposition = req.body.senderValueProposition;
+    const senderDesiredCallToAction = req.body.senderDesiredCallToAction;
+    console.log("Recipient Website : ", recipientWebsite);
+    console.log("Recipient Company Name : ", recipientCompanyName);
+    console.log("Recipient Company Name :", recipientCompanyName);
 
     if (!recipientWebsite || !recipientCompanyName || !senderCompanyDetails) {
       console.log("Nothing found");
@@ -86,7 +92,8 @@ app.post("/generate-emails", async (req, res) => {
       Body: bodyOfMail,
     };
     console.log(data);
-    res.render("scrap", { result: data });
+    res.render("scrap", { subject: data.Subject, body: data.Body });
+    //res.json({subject :data.Subject, body :data.Body});
   } catch (error) {
     console.error("Error generating email:", error.message);
     res.status(500).json({ error: "Error generating email" });
@@ -95,10 +102,19 @@ app.post("/generate-emails", async (req, res) => {
 
 async function scrapeRecipientWebsite(website) {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-gpu",
+      "--enable-webgl",
+      "--window-size=800,800",
+    ],
   });
-  const page = await browser.newPage();
+  const ua =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36";
 
+  const page = await browser.newPage();
+  await page.setUserAgent(ua);
   await page.setDefaultNavigationTimeout(60000);
 
   await page.goto(website);

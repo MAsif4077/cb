@@ -17,7 +17,7 @@
         <input
           type="text"
           class="form-control"
-          name="website"
+          name="recipientWebsite"
           id="exampleInputEmail1"
           placeholder="Enter Recipient Website"
           aria-describedby="emailHelp"
@@ -27,7 +27,7 @@
         <input
           type="text"
           class="form-control"
-          name="companyName"
+          name="recipientCompanyName"
           placeholder="Recipient Company Name"
           id="exampleInputPassword1"
         />
@@ -45,7 +45,7 @@
         <input
           type="text"
           class="form-control"
-          name="category"
+          name="recipientIndustryCategory"
           placeholder="Recipient Industry Category"
           id="exampleInputPassword1"
         />
@@ -54,7 +54,7 @@
         <input
           type="text"
           class="form-control"
-          name="SenderCompanyDetails"
+          name="senderCompanyDetails"
           placeholder="Sender Company Details"
           id="exampleInputPassword1"
         />
@@ -63,7 +63,7 @@
         <input
           type="text"
           class="form-control"
-          name="senderValueProp"
+          name="senderValueProposition"
           placeholder="Sender Value Propositon"
           id="exampleInputPassword1"
         />
@@ -72,7 +72,7 @@
         <input
           type="text"
           class="form-control"
-          name="sendDesiredCall"
+          name="senderDesiredCallToAction"
           placeholder="Sender Direct To Call"
           id="exampleInputPassword1"
         />
@@ -82,12 +82,12 @@
     </form>
   </body>
   <div class="container">
-    <% if (result.Subject) { %>
-    <b>Subject:</b>
-    <h5 style="color: blueviolet"><%= result.Subject %></h5>
-    <% } %> <% if (result.Body) { %>
-    <b>Body:</b>
-    <h5 style="color: blueviolet"><%= result.Body %></h5>
+    <% if (subject) { %>
+    <h5>Subject:</h5>
+    <p style="color: blueviolet"><%= subject %></p>
+    <% } %> <% if (body) { %>
+    <h5>Body:</h5>
+    <p style="color: blueviolet"><%= body %></p>
     <% } %>
   </div>
 
